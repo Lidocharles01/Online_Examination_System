@@ -90,8 +90,7 @@
                             <p {% if question.student_answer == question.correct_answer and question.correct_answer == 'C' %} class="alert alert-success fw-bold" {% elif question.student_answer != question.correct_answer and question.student_answer == 'C' %} class="alert alert-danger fw-bold" {% else %} class="alert alert-light border" {% endif %} style="padding: 0.60rem !important">C : {{ question.option3 }} </p>
                             <p {% if question.student_answer == question.correct_answer and question.correct_answer == 'D' %} class="alert alert-success fw-bold" {% elif question.student_answer != question.correct_answer and question.student_answer == 'D' %} class="alert alert-danger fw-bold" {% else %} class="alert alert-light border" {% endif %} style="padding: 0.60rem !important">D : {{ question.option4 }} </p>
                         {% elif question.format == 'FIB' %}
-                         <p {% if question.student_answer == question.answer %} class="alert alert-success fw-bold" {% elif question.student_answer != question.answer %} class="alert alert-danger fw-bold" {% else %} class="alert alert-light border" {% endif %} style="padding: 0.60rem !important">{{ question.answer }}</p>
-                          <p {% if question.student_answer == question.answer %} class="alert alert-success fw-bold" {% else %} class="alert alert-danger fw-bold" {% endif %} style="padding: 0.60rem !important">
+                            <p {% if question.student_answer == question.answer %} class="alert alert-success fw-bold" {% else %} class="alert alert-primary fw-bold" {% endif %} style="padding: 0.60rem !important">
                             Your Answer: {{ question.student_answer }}
                           </p>
                         {% endif %}
