@@ -1,0 +1,22 @@
+<!-- quiz/deleteQuiz.html -->
+{% extends 'index3.html' %}
+{% block title %}Delete exam | {{ quiz.title }}{% endblock title %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+<div class="container" style="max-width: 25cm;">
+
+  <div class="container mt-4">
+    <h2 class="mb-4">Delete Exam</h2>
+    <p>Are you sure you want to delete the quiz "{{ quiz.title }}"?</p>
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Delete</button>
+      <a href="{% url 'allQuizzes' code=quiz.course.code %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+  </div>
+{% endblock content %}

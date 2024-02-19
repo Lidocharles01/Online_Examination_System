@@ -1,0 +1,110 @@
+<!-- quiz/editQuiz.html -->
+{% extends 'index2.html' %}
+
+{% block title %}Edit Exam | {{ course.name }}{% endblock title %}
+{% block profile %}{% url 'profile' faculty.faculty_id %}{% endblock profile %}
+
+{% block content %}
+    <br>
+    <br>
+    <br>
+    <div class="container" style="max-width: 25cm;">
+        <div class="container d-flex justify-content-center mt-3" id="form">
+            <div class="border shadow-sm border-light rounded pb-4 px-3 col-lg-8 col-sm-12 mt-3">
+                <span class="fw-bold fs-5 d-flex justify-content-center my-3">
+                    Edit Quiz
+                </span>
+                <form action="{% url 'editQuiz' code=course.code quiz_id=quiz.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3 mt-3 fw-bold">
+                        <label for="title" class="form-label">Exam Title</label>
+                        <input type="text" class="form-control" id="title" name='title' value="{{ quiz.title }}" required>
+                    </div>
+                    <div class="mb-3 fw-bold">
+                        <label for="description" class="form-label">Instructions</label>
+                        <textarea class="form-control" id="description" name="description" required>{{ quiz.description }}</textarea>
+                    </div>
+                    <div class="mb-3 fw-bold">
+                        <label for="start" class="form-label">Start</label>
+                        <input type="datetime-local" class="form-control" id="start" name="start" value="{{ quiz.start|date:'Y-m-d\TH:i' }}" required>
+                    </div>
+                    <div class="mb-3 fw-bold">
+                        <label for="end" class="form-label">End</label>
+                        <input type="datetime-local" class="form-control" id="end" name="end" value="{{ quiz.end|date:'Y-m-d\TH:i' }}" required>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="checkbox" name="checkbox" {% if quiz.publish_status %}checked{% endif %}>
+                        <label class="form-check-label" for="checkbox">
+                            Publish grade after submission
+                        </label>
+                    </div>
+                    <div class="d-flex justify-content-end p-2 border" style="background-color: rgb(250,250,250);">
+                        <button type="submit" class="btn btn-sm btn-primary mx-2">Update</button>
+                        <a href="{% url 'allQuizzes' code=course.code %}" class="btn btn-sm btn-danger">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+   <script>
+   // Change value of checkbox if checked
+   $('#checkbox').change(function() {
+       if ($(this).is(":checked")) {
+           $('#checkbox').val("True");
+       } else {
+           $('#checkbox').val("False");
+       }
+   });
+
+   // Check if end date is after start date
+   $('#form').on('submit', function(e) {
+       var start = new Date($('#start').val());
+       var end = new Date($('#end').val());
+
+       if (start >= end) {
+           e.preventDefault();
+           alert('End date must be after start date');
+       }
+   });
+
+   // Function to get the current date and time in the format expected by datetime-local input
+   function getCurrentDateTime() {
+       const now = new Date();
+       const year = now.getFullYear();
+       const month = `${(now.getMonth() + 1)}`.padStart(2, '0');
+       const day = `${now.getDate()}`.padStart(2, '0');
+       const hours = `${now.getHours()}`.padStart(2, '0');
+       const minutes = `${now.getMinutes()}`.padStart(2, '0');
+       return `${year}-${month}-${day}T${hours}:${minutes}`;
+   }
+
+   // Set the min attribute for the start date input
+   const startInput = document.getElementById('start');
+   startInput.min = getCurrentDateTime();
+
+   // Set the min attribute for the end date input
+   const endInput = document.getElementById('end');
+   endInput.min = getCurrentDateTime();
+
+   // Change event listener for start date to update the min attribute of end date dynamically
+   startInput.addEventListener('change', function () {
+       endInput.min = startInput.value;
+       if (endInput.value < startInput.value) {
+           endInput.value = startInput.value;
+       }
+   });
+
+   // Disable past dates on page load
+   startInput.addEventListener('input', function () {
+       if (startInput.value < getCurrentDateTime()) {
+           startInput.value = getCurrentDateTime();
+       }
+   });
+
+   endInput.addEventListener('input', function () {
+       if (endInput.value < getCurrentDateTime()) {
+           endInput.value = getCurrentDateTime();
+       }
+   });
+</script>
+{% endblock %}

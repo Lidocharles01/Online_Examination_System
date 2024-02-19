@@ -1,0 +1,159 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in | Exam</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icon/exam.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icon/exam.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icon/exam.png' %}">
+    <link rel="manifest" href="{% static 'images/icon/site.webmanifest' %}">
+    <link rel="stylesheet" href="{% static 'styles/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/style-login.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400,700&display=swap">
+    <style media="screen">
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            background: #304352;
+            background: -webkit-linear-gradient(to right, #d7d2cc, #304352);
+            background: linear-gradient(to right, #d7d2cc, #304352);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .box {
+            width: 400px; /* Adjust form size */
+            padding: 30px;
+            background: #212529;
+            border-radius: 15px;
+            text-align: center;
+            transition: 0.25s;
+        }
+
+        .box input[type="text"],
+        .box input[type="password"] {
+            border: 0;
+            background: none;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+            border: 2px solid #838383;
+            padding: 10px 10px;
+            width: 250px;
+            outline: none;
+            color: white;
+            border-radius: 0px;
+            transition: 0.25s;
+        }
+
+        .box h1 {
+            color: white;
+            font-weight: 500;
+        }
+
+        .box input[type="text"]:focus,
+        .box input[type="password"]:focus {
+            width: 300px;
+            border-color: #4caf50;
+        }
+
+        .box input[type="submit"] {
+            border: 0;
+            background: #4caf50;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+            padding: 14px 40px;
+            outline: none;
+            color: white;
+            border-radius: 0px;
+            transition: 0.25s;
+            cursor: pointer;
+        }
+
+        .box input[type="submit"]:hover {
+            background: #347736;
+        }
+
+        .box:before {
+            content: "";
+            background: url("{% static 'images/back.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.7; /* Adjust background image opacity */
+            border-radius: 15px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+</head>
+
+<body>
+    <div class="box">
+        <h1 class="form-title">LOGIN</h1>
+        <form method="POST" class="register-form" id="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.id.id_for_label }}"><span class="material-symbols-outlined"
+                        style="vertical-align:text-bottom">person</span></label>
+                {{ form.id }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}"><span class="material-symbols-outlined"
+                        style="vertical-align:text-bottom">lock</span></label>
+                {{ form.password }}
+            </div>
+            <div class="d-grid">
+                <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit">Login</button>
+            </div>
+        </form>
+        <div class="d-flex justify-content-around flex-wrap">
+            <div class="">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
+                        role="button">
+                        Login as Guest
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="/student">Student</a></li>
+                        <li><a class="dropdown-item" href="/teacher">Teacher</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="">
+                <a href="/admin" target="_blank">Login as Admin</a>
+            </div>
+        </div>
+        {% if error_messages %}
+        <!-- Error Alert -->
+        <div class="alert alert-danger alert-dismissible fade show my-2">
+            {% for message in error_messages %}
+            {{ message }}
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+    </div>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+</body>
+
+</html>

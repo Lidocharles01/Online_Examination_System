@@ -1,0 +1,129 @@
+{% extends 'index3.html' %}
+{% block title %}Edit Question {{ quiz.title }} | {{ course.name }} {% endblock title %}
+{% block user %}
+  {{ faculty.name }}
+{% endblock user %}
+{% block courses %}
+  {% url 'facultyCourses' %}
+{% endblock courses %}
+{% block allCourses %}
+  {% url 'courses' %}
+{% endblock %}
+{% comment %} alert {% endcomment %}
+{% block content %}
+
+  <style>
+    /* Custom styles for better appearance */
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .container {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      transition: 0.3s;
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover {
+      filter: brightness(90%);
+    }
+  </style>
+<br>
+
+<div class="container" style="max-width: 25cm;">
+  <div class="container">
+    <div class="container mt-4">
+      <h2 class="mb-4">Edit Questions</h2>
+      <form method="post">
+        {% csrf_token %}
+        {% for question in quiz.question_set.all %}
+          <div class="card">
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="question_{{ question.id }}" class="form-label"><strong>Question</strong></label>
+                <input type="text" class="form-control" id="question_{{ question.id }}" name="question_{{ question.id }}" value="{{ question.question }}" required>
+              </div>
+
+              {% if question.format == 'MCQ' %}
+                <!-- Fields specific to Multiple Choice -->
+                <div class="mb-3">
+                  <label for="option1_{{ question.id }}" class="form-label"><strong>Option A</strong></label>
+                  <input type="text" class="form-control" id="option1_{{ question.id }}" name="option1_{{ question.id }}" value="{{ question.option1 }}" required>
+                </div>
+                <div class="mb-3">
+                  <label for="option2_{{ question.id }}" class="form-label"><strong>Option B</strong></label>
+                  <input type="text" class="form-control" id="option2_{{ question.id }}" name="option2_{{ question.id }}" value="{{ question.option2 }}" required>
+                </div>
+                <div class="mb-3">
+                  <label for="option3_{{ question.id }}" class="form-label"><strong>Option C</strong></label>
+                  <input type="text" class="form-control" id="option3_{{ question.id }}" name="option3_{{ question.id }}" value="{{ question.option3 }}" required>
+                </div>
+                <div class="mb-3">
+                  <label for="option4_{{ question.id }}" class="form-label"><strong>Option D</strong></label>
+                  <input type="text" class="form-control" id="option4_{{ question.id }}" name="option4_{{ question.id }}" value="{{ question.option4 }}" required>
+                </div>
+                <div class="mb-3">
+                  <label for="correct_answer_{{ question.id }}" class="form-label"><strong>Correct Answer</strong></label>
+                  <select class="form-select" id="correct_answer_{{ question.id }}" name="correct_answer_{{ question.id }}" required>
+                    <option value="A" {% if question.correct_answer == 'A' %}selected{% endif %}>A</option>
+                    <option value="B" {% if question.correct_answer == 'B' %}selected{% endif %}>B</option>
+                    <option value="C" {% if question.correct_answer == 'C' %}selected{% endif %}>C</option>
+                    <option value="D" {% if question.correct_answer == 'D' %}selected{% endif %}>D</option>
+                  </select>
+                </div>
+              {% elif question.format == 'TF' %}
+                <!-- Fields specific to True/False -->
+                <div class="mb-3">
+                  <label for="is_true_{{ question.id }}" class="form-label"><strong>Is True?</strong></label>
+                  <select class="form-select" id="is_true_{{ question.id }}" name="is_true_{{ question.id }}" required>
+                    <option value="True" {% if question.is_true %}selected{% endif %}>True</option>
+                    <option value="False" {% if not question.is_true %}selected{% endif %}>False</option>
+                  </select>
+                </div>
+              {% elif question.format == 'FIB' %}
+                <!-- Fields specific to Fill in the Blank -->
+                <div class="mb-3">
+                  <label for="correct_answer_fib_{{ question.id }}" class="form-label"><strong>Correct Answer</strong></label>
+                  <input type="text" class="form-control" id="correct_answer_fib_{{ question.id }}" name="correct_answer_fib_{{ question.id }}" value="{{ question.correct_answer }}" required>
+                </div>
+              {% endif %}
+
+              <div class="mb-3">
+                <label for="marks_{{ question.id }}" class="form-label"><strong>Marks</strong></label>
+                <input type="number" class="form-control" id="marks_{{ question.id }}" name="marks_{{ question.id }}" value="{{ question.marks }}" required>
+              </div>
+              <div class="mb-3">
+                <label for="explanation_{{ question.id }}" class="form-label"><strong>Explanation</strong></label>
+                <textarea class="form-control" id="explanation_{{ question.id }}" name="explanation_{{ question.id }}" rows="3">{{ question.explanation }}</textarea>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{% url 'allQuizzes' code=quiz.course.code %}" class="btn btn-secondary">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+  <script>
+    $(document).ready(function(){
+      setTimeout(function(){
+        $(".alert").alert('close');
+      }, 4000);
+    });
+  </script>
+{% endblock content %}
